@@ -1,0 +1,895 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#101827">
+<title>SupportMate AI — Customer Experience</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap');
+
+:root {
+  --navy: #101827;
+  --navy2: #172338;
+  --blue: #625bf6;
+  --purple: #8878ff;
+  --ink: #20263b;
+  --muted: #8991a5;
+  --line: #e9ebf3;
+  --paper: #ffffff;
+  --bg: #f6f7fc;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+}
+
+button, input { font: inherit; }
+button { -webkit-tap-highlight-color: transparent; }
+
+.app {
+  display: grid;
+  grid-template-columns: 258px minmax(0,1fr);
+  max-width: 1600px;
+  min-height: 100vh;
+  margin: auto;
+  background: var(--paper);
+  box-shadow: 0 0 80px #1b23400a;
+}
+
+/* Sidebar */
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  padding: 27px 18px 18px;
+  background:
+    radial-gradient(ellipse at 0 0, #26395d 0%, transparent 52%),
+    var(--navy);
+  color: #fff;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 8px 32px;
+}
+
+.brand-icon {
+  display: grid;
+  place-items: center;
+  width: 43px;
+  height: 43px;
+  border-radius: 14px;
+  background: linear-gradient(140deg,#9c8bff,#635cf6);
+  box-shadow: 0 7px 25px #625bf64c;
+  font-size: 23px;
+}
+
+.brand-name {
+  font: 800 19px 'Manrope', sans-serif;
+  letter-spacing: -.7px;
+}
+
+.brand-name span { color: #a79cff; }
+
+.brand-caption {
+  margin-top: 3px;
+  color: #9ba9c1;
+  font-size: 11px;
+}
+
+.section-label {
+  padding: 0 10px;
+  color: #7f8ba4;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.7px;
+  text-transform: uppercase;
+}
+
+.new-chat {
+  display: flex;
+  align-items: center;
+  gap: 11px;
+  width: 100%;
+  margin: 13px 0 30px;
+  padding: 13px;
+  border: 1px solid #ffffff23;
+  border-radius: 12px;
+  background: #ffffff0b;
+  color: white;
+  text-align: left;
+  cursor: pointer;
+  transition: .2s;
+}
+
+.new-chat:hover { background: #ffffff16; }
+.new-chat .plus { font-size: 23px; color: #aaa0ff; }
+
+.quick-list {
+  display: grid;
+  gap: 7px;
+  margin-top: 13px;
+}
+
+.quick {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 12px 11px;
+  border: 1px solid transparent;
+  border-radius: 11px;
+  background: transparent;
+  color: #bdc7da;
+  font-size: 12px;
+  text-align: left;
+  cursor: pointer;
+  transition: .2s;
+}
+
+.quick:hover {
+  border-color: #ffffff13;
+  background: #ffffff0d;
+  color: white;
+}
+
+.quick-icon {
+  display: grid;
+  place-items: center;
+  width: 29px;
+  height: 29px;
+  flex-shrink: 0;
+  border-radius: 9px;
+  background: #ffffff0d;
+  font-size: 15px;
+}
+
+.sidebar-spacer { flex: 1; min-height: 35px; }
+
+.support-card {
+  padding: 15px;
+  border: 1px solid #ffffff13;
+  border-radius: 15px;
+  background: linear-gradient(145deg,#ffffff10,#ffffff05);
+}
+
+.support-card .orb {
+  display: grid;
+  place-items: center;
+  width: 35px;
+  height: 35px;
+  margin-bottom: 11px;
+  border-radius: 11px;
+  background: #a397ff20;
+  font-size: 17px;
+}
+
+.support-card strong { font-size: 12px; }
+
+.support-card p {
+  margin: 7px 0 13px;
+  color: #a5b0c4;
+  font-size: 11px;
+  line-height: 1.7;
+}
+
+.human-btn {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ffffff25;
+  border-radius: 9px;
+  background: #ffffff0b;
+  color: white;
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.profile {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 17px;
+  padding: 14px 5px 0;
+  border-top: 1px solid #ffffff15;
+}
+
+.avatar {
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  flex-shrink: 0;
+  border-radius: 11px;
+  background: linear-gradient(135deg,#f7c8a6,#b8a0ff);
+  color: #26243d;
+  font-weight: 800;
+}
+
+.profile-name { font-size: 12px; font-weight: 600; }
+.profile-sub { margin-top: 3px; color: #8693aa; font-size: 10px; }
+
+/* Main workspace */
+.workspace {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 100vh;
+  background: #fff;
+}
+
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  padding: 21px 36px;
+  border-bottom: 1px solid var(--line);
+}
+
+.eyebrow {
+  color: #9298aa;
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
+}
+
+.topbar h2 {
+  margin: 5px 0 0;
+  font: 800 19px 'Manrope', sans-serif;
+  letter-spacing: -.5px;
+}
+
+.top-actions {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.connection {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 12px;
+  border: 1px solid #e8eaf1;
+  border-radius: 30px;
+  color: #70788c;
+  font-size: 11px;
+  white-space: nowrap;
+}
+
+.dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #f2ad44;
+  box-shadow: 0 0 0 3px #f2ad441b;
+}
+
+.dot.online {
+  background: #27c58b;
+  box-shadow: 0 0 0 3px #27c58b1c;
+}
+
+.dot.offline {
+  background: #ef6464;
+  box-shadow: 0 0 0 3px #ef64641b;
+}
+
+.icon-btn {
+  display: grid;
+  place-items: center;
+  width: 37px;
+  height: 37px;
+  border: 1px solid #e8eaf1;
+  border-radius: 11px;
+  background: white;
+  color: #777f93;
+  font-size: 17px;
+  cursor: pointer;
+}
+
+.icon-btn:hover { background: #f6f5ff; }
+
+.chat-layout {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  width: 100%;
+  max-width: 950px;
+  margin: 0 auto;
+  min-height: 0;
+}
+
+.messages {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 24px;
+  padding: 30px 36px;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+}
+
+.welcome {
+  margin: 12px auto 4px;
+  max-width: 590px;
+  text-align: center;
+}
+
+.welcome-symbol {
+  display: grid;
+  place-items: center;
+  width: 65px;
+  height: 65px;
+  margin: 0 auto 20px;
+  border: 1px solid #e9e6ff;
+  border-radius: 21px;
+  background: linear-gradient(145deg,#f4f1ff,#eeedff);
+  color: #6b5ef4;
+  font-size: 30px;
+  box-shadow: 0 10px 32px #6d60ef12;
+}
+
+.welcome h1 {
+  margin: 0;
+  font: 800 clamp(25px,3vw,36px) 'Manrope',sans-serif;
+  letter-spacing: -1.5px;
+  line-height: 1.25;
+}
+
+.welcome h1 span {
+  color: #7569f5;
+}
+
+.welcome > p {
+  max-width: 440px;
+  margin: 14px auto 0;
+  color: #858ca0;
+  font-size: 13px;
+  line-height: 1.9;
+}
+
+.chips {
+  display: grid;
+  grid-template-columns: repeat(2,minmax(0,1fr));
+  gap: 11px;
+  margin-top: 28px;
+  text-align: left;
+}
+
+.chip {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 76px;
+  padding: 13px;
+  border: 1px solid #e9eaf2;
+  border-radius: 14px;
+  background: white;
+  cursor: pointer;
+  transition: transform .2s,border-color .2s,box-shadow .2s;
+}
+
+.chip:hover {
+  transform: translateY(-2px);
+  border-color: #c9c2ff;
+  box-shadow: 0 9px 25px #5145e90c;
+}
+
+.chip-emoji {
+  display: grid;
+  place-items: center;
+  width: 37px;
+  height: 37px;
+  flex-shrink: 0;
+  border-radius: 11px;
+  background: #f1efff;
+  font-size: 17px;
+}
+
+.chip strong { display: block; font-size: 12px; font-weight: 700; }
+.chip small { display: block; margin-top: 5px; color: #9399aa; font-size: 10px; line-height: 1.4; }
+
+.message-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+  max-width: 86%;
+  animation: appear .22s ease;
+}
+
+.message-row.user-row {
+  align-self: flex-end;
+  flex-direction: row-reverse;
+}
+
+.bot-avatar {
+  display: grid;
+  place-items: center;
+  width: 33px;
+  height: 33px;
+  flex-shrink: 0;
+  border: 1px solid #e7e3ff;
+  border-radius: 11px;
+  background: #f2efff;
+  color: #6b5ef4;
+  font-size: 16px;
+}
+
+.message-body { min-width: 0; }
+.message-label { margin: 2px 0 7px; color: #949aab; font-size: 10px; }
+.user-row .message-label { text-align: right; }
+
+.bubble {
+  padding: 13px 16px;
+  border: 1px solid #e9ebf2;
+  border-radius: 4px 15px 15px 15px;
+  background: #f8f9fc;
+  color: #343b4f;
+  font-size: 13px;
+  line-height: 1.8;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+
+.user-row .bubble {
+  border-color: transparent;
+  border-radius: 15px 4px 15px 15px;
+  background: linear-gradient(135deg,#6c62f4,#8872f9);
+  color: white;
+}
+
+.typing-dots { display: inline-flex; gap: 5px; padding: 4px; }
+.typing-dots i {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #9589ff;
+  animation: bounce .8s infinite alternate;
+}
+.typing-dots i:nth-child(2) { animation-delay: .15s; }
+.typing-dots i:nth-child(3) { animation-delay: .3s; }
+
+@keyframes bounce { to { opacity: .3; transform: translateY(-4px); } }
+@keyframes appear { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+.escalation {
+  margin: 0 36px 12px;
+  padding: 12px 15px;
+  border: 1px solid #f3e3c5;
+  border-radius: 12px;
+  background: #fff9ed;
+  color: #93651c;
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+.hidden { display: none !important; }
+
+/* Composer */
+.composer-wrap {
+  padding: 14px 36px 23px;
+  border-top: 1px solid #f0f1f6;
+  background: #fff;
+}
+
+.composer {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px;
+  border: 1px solid #e4e6ef;
+  border-radius: 17px;
+  background: white;
+  box-shadow: 0 6px 25px #1c25400a;
+  transition: border-color .2s,box-shadow .2s;
+}
+
+.composer:focus-within {
+  border-color: #c5beff;
+  box-shadow: 0 0 0 4px #7569f50d;
+}
+
+.composer input {
+  flex: 1;
+  width: 0;
+  min-width: 0;
+  padding: 11px 12px;
+  border: 0;
+  outline: 0;
+  background: transparent;
+  color: var(--ink);
+  font-size: 13px;
+}
+
+.composer input::placeholder { color: #a0a5b5; }
+
+.send {
+  display: grid;
+  place-items: center;
+  width: 43px;
+  height: 43px;
+  flex-shrink: 0;
+  border: 0;
+  border-radius: 12px;
+  background: linear-gradient(135deg,#7165f5,#8b73fa);
+  color: white;
+  font-size: 19px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px #7165f532;
+  transition: .2s;
+}
+
+.send:hover { transform: translateY(-1px); box-shadow: 0 7px 17px #7165f54c; }
+.send:disabled { opacity: .5; cursor: wait; transform: none; }
+
+.disclaimer {
+  margin-top: 12px;
+  color: #a0a5b4;
+  font-size: 10px;
+  text-align: center;
+  line-height: 1.6;
+}
+
+.toast {
+  position: fixed;
+  right: 22px;
+  bottom: 22px;
+  z-index: 10;
+  max-width: calc(100vw - 44px);
+  padding: 13px 17px;
+  border: 1px solid #e6e7f1;
+  border-radius: 12px;
+  background: white;
+  box-shadow: 0 12px 35px #10182720;
+  color: #42485c;
+  font-size: 12px;
+  animation: appear .2s ease;
+}
+
+@media(min-width:1200px) {
+  .messages { padding-top: 40px; }
+}
+
+@media(max-width:800px) {
+  .app { grid-template-columns: 205px minmax(0,1fr); }
+  .sidebar { padding: 22px 12px 15px; }
+  .topbar { padding: 18px 20px; }
+  .messages { padding: 25px 20px; }
+  .composer-wrap { padding: 12px 20px 18px; }
+  .escalation { margin-left: 20px; margin-right: 20px; }
+  .message-row { max-width: 95%; }
+  .brand { padding-left: 5px; }
+}
+
+@media(max-width:560px) {
+  .app { display: flex; flex-direction: column; }
+  .sidebar { padding: 12px 14px; }
+  .brand { padding: 0; }
+  .brand-icon { width: 37px; height: 37px; }
+  .brand-name { font-size: 16px; }
+  .brand-caption { font-size: 10px; }
+  .sidebar > .section-label,
+  .sidebar > .new-chat,
+  .sidebar > .sidebar-spacer,
+  .support-card,
+  .profile { display: none; }
+  .quick-list { display: flex; gap: 7px; margin-top: 12px; overflow-x: auto; }
+  .quick { width: auto; flex-shrink: 0; padding: 7px 9px; font-size: 11px; }
+  .quick-icon { width: 25px; height: 25px; }
+  .workspace { min-height: 75vh; min-height: 75dvh; }
+  .topbar { padding: 15px; }
+  .topbar h2 { font-size: 16px; }
+  .connection { padding: 7px 9px; font-size: 10px; }
+  .top-actions { gap: 6px; }
+  .icon-btn { width: 33px; height: 33px; }
+  .messages { padding: 23px 15px; gap: 19px; }
+  .welcome { margin-top: 8px; }
+  .welcome-symbol { width: 54px; height: 54px; font-size: 25px; margin-bottom: 15px; }
+  .welcome h1 { font-size: 27px; }
+  .welcome > p { font-size: 12px; }
+  .chips { gap: 8px; margin-top: 22px; }
+  .chip { min-height: 80px; gap: 8px; padding: 10px; }
+  .chip-emoji { width: 29px; height: 29px; font-size: 14px; }
+  .chip strong { font-size: 11px; }
+  .chip small { font-size: 9px; }
+  .composer-wrap { padding: 10px 13px 15px; }
+  .composer input { padding-left: 8px; font-size: 12px; }
+  .send { width: 39px; height: 39px; }
+  .message-row { max-width: 100%; }
+  .bubble { font-size: 12px; padding: 11px 13px; }
+  .bot-avatar { width: 29px; height: 29px; }
+  .escalation { margin: 0 13px 10px; }
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-icon">✳</div>
+      <div>
+        <div class="brand-name">SupportMate<span>.</span></div>
+        <div class="brand-caption">AI Customer Experience</div>
+      </div>
+    </div>
+
+    <div class="section-label">Workspace</div>
+    <button class="new-chat" id="newChat">
+      <span class="plus">＋</span>
+      <span>Start a new conversation</span>
+    </button>
+
+    <div class="section-label">Quick questions</div>
+    <div class="quick-list">
+      <button class="quick" data-question="How long does shipping take?">
+        <span class="quick-icon">📦</span> Shipping & delivery
+      </button>
+      <button class="quick" data-question="What is your return policy?">
+        <span class="quick-icon">↩️</span> Returns & exchanges
+      </button>
+      <button class="quick" data-question="How long does a refund take?">
+        <span class="quick-icon">💳</span> Payments & refunds
+      </button>
+      <button class="quick" data-question="What are your business hours?">
+        <span class="quick-icon">🕒</span> Contact & hours
+      </button>
+    </div>
+
+    <div class="sidebar-spacer"></div>
+
+    <div class="support-card">
+      <div class="orb">✧</div>
+      <strong>Need a real person?</strong>
+      <p>Our support team is available Monday to Friday, 9 AM–5 PM.</p>
+      <button class="human-btn" id="humanSupport">Contact human support ↗</button>
+    </div>
+
+    <div class="profile">
+      <div class="avatar">S</div>
+      <div>
+        <div class="profile-name">SupportMate AI</div>
+        <div class="profile-sub">Local AI assistant</div>
+      </div>
+    </div>
+  </aside>
+
+  <main class="workspace">
+    <header class="topbar">
+      <div>
+        <div class="eyebrow">CUSTOMER CARE</div>
+        <h2>How can we help?</h2>
+      </div>
+      <div class="top-actions">
+        <div class="connection">
+          <span class="dot" id="statusDot"></span>
+          <span id="statusText">Connecting...</span>
+        </div>
+        <button class="icon-btn" id="clearChat" title="Clear conversation" aria-label="Clear conversation">↺</button>
+      </div>
+    </header>
+
+    <div class="chat-layout">
+      <section class="messages" id="messages" aria-live="polite">
+        <div class="welcome" id="welcome">
+          <div class="welcome-symbol">✳</div>
+          <h1>Your support,<br><span>made smarter.</span></h1>
+          <p>Hi there! 👋 I'm your AI support assistant. Ask a question and I'll help you find the answer.</p>
+
+          <div class="chips">
+            <button class="chip" data-question="How long does shipping take?">
+              <span class="chip-emoji">📦</span>
+              <span><strong>Track & shipping</strong><small>Delivery times and orders</small></span>
+            </button>
+            <button class="chip" data-question="What is your return policy?">
+              <span class="chip-emoji">↩️</span>
+              <span><strong>Returns & refunds</strong><small>Understand our policies</small></span>
+            </button>
+            <button class="chip" data-question="What are your business hours?">
+              <span class="chip-emoji">🕒</span>
+              <span><strong>Business hours</strong><small>When we're available</small></span>
+            </button>
+            <button class="chip" data-question="I want to speak to a human agent.">
+              <span class="chip-emoji">💬</span>
+              <span><strong>Talk to support</strong><small>Get help from our team</small></span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <div class="escalation hidden" id="escalation">
+        <strong>Human support</strong><br>
+        Please contact support@example.com during business hours, Monday to Friday, 9 AM–5 PM. This demo cannot transfer your chat to a live agent.
+      </div>
+
+      <div class="composer-wrap">
+        <form class="composer" id="chatForm">
+          <input id="messageInput" maxlength="2000" autocomplete="off"
+            placeholder="Message SupportMate..." aria-label="Your message" required>
+          <button class="send" id="sendButton" type="submit" aria-label="Send message">↑</button>
+        </form>
+        <div class="disclaimer">✦ AI-powered assistance · Responses may not always be accurate</div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script>
+const messagesEl = document.getElementById("messages");
+const welcome = document.getElementById("welcome");
+const form = document.getElementById("chatForm");
+const input = document.getElementById("messageInput");
+const sendButton = document.getElementById("sendButton");
+const statusText = document.getElementById("statusText");
+const statusDot = document.getElementById("statusDot");
+const escalationEl = document.getElementById("escalation");
+const history = [];
+let busy = false;
+let toastTimer;
+
+function toast(message) {
+  let el = document.querySelector(".toast");
+  if (!el) {
+    el = document.createElement("div");
+    el.className = "toast";
+    el.setAttribute("role", "status");
+    document.body.appendChild(el);
+  }
+  el.textContent = message;
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.remove(), 3000);
+}
+
+function setStatus(state, label) {
+  statusDot.className = "dot " + state;
+  statusText.textContent = label;
+}
+
+function addMessage(text, role) {
+  welcome.classList.add("hidden");
+
+  const row = document.createElement("div");
+  row.className = "message-row" + (role === "user" ? " user-row" : "");
+
+  if (role !== "user") {
+    const avatar = document.createElement("div");
+    avatar.className = "bot-avatar";
+    avatar.textContent = "✳";
+    row.appendChild(avatar);
+  }
+
+  const body = document.createElement("div");
+  body.className = "message-body";
+
+  const label = document.createElement("div");
+  label.className = "message-label";
+  label.textContent = role === "user" ? "You" : "SupportMate AI";
+
+  const bubble = document.createElement("div");
+  bubble.className = "bubble";
+  bubble.textContent = text;
+
+  body.appendChild(label);
+  body.appendChild(bubble);
+  row.appendChild(body);
+  messagesEl.appendChild(row);
+  messagesEl.scrollTop = messagesEl.scrollHeight;
+
+  return bubble;
+}
+
+function showTyping() {
+  const bubble = addMessage("", "assistant");
+  bubble.innerHTML = '<span class="typing-dots"><i></i><i></i><i></i></span>';
+  return bubble;
+}
+
+async function checkHealth() {
+  try {
+    const response = await fetch("/api/health");
+    const data = await response.json();
+
+    if (data.model_available) {
+      setStatus("online", "AI is ready");
+    } else {
+      setStatus("offline", "Model unavailable");
+    }
+  } catch {
+    setStatus("offline", "AI disconnected");
+  }
+}
+
+async function sendMessage(text) {
+  text = text.trim();
+  if (!text || busy) return;
+
+  busy = true;
+  addMessage(text, "user");
+  input.value = "";
+  input.disabled = true;
+  sendButton.disabled = true;
+  escalationEl.classList.add("hidden");
+  setStatus("", "Thinking...");
+  const typing = showTyping();
+
+  try {
+    const response = await fetch("/api/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        message: text,
+        history: history.slice(-10)
+      })
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+      throw new Error(data.detail || "The request failed.");
+    }
+
+    typing.textContent = data.reply;
+    history.push({ role: "user", content: text });
+    history.push({ role: "assistant", content: data.reply });
+
+    if (data.escalated) {
+      escalationEl.classList.remove("hidden");
+    }
+
+    setStatus("online", "AI is ready");
+  } catch (error) {
+    typing.textContent = "I couldn't get a response. " + error.message;
+    setStatus("offline", "Connection issue");
+  } finally {
+    busy = false;
+    input.disabled = false;
+    sendButton.disabled = false;
+    input.focus();
+    messagesEl.scrollTop = messagesEl.scrollHeight;
+  }
+}
+
+function resetChat() {
+  if (busy) {
+    toast("Please wait for the current response to finish.");
+    return;
+  }
+
+  history.length = 0;
+  messagesEl.replaceChildren(welcome);
+  welcome.classList.remove("hidden");
+  escalationEl.classList.add("hidden");
+  input.value = "";
+  input.focus();
+  toast("A fresh conversation is ready.");
+}
+
+form.addEventListener("submit", event => {
+  event.preventDefault();
+  sendMessage(input.value);
+});
+
+document.querySelectorAll("[data-question]").forEach(button => {
+  button.addEventListener("click", () => sendMessage(button.dataset.question));
+});
+
+document.getElementById("newChat").addEventListener("click", resetChat);
+document.getElementById("clearChat").addEventListener("click", resetChat);
+
+document.getElementById("humanSupport").addEventListener("click", () => {
+  sendMessage("I want to speak to a human agent.");
+});
+
+checkHealth();
+</script>
+</body>
+</html>
